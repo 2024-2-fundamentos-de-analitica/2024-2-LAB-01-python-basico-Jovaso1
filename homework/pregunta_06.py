@@ -5,7 +5,7 @@ solo puede utilizar las funciones y librerias basicas de python. No puede
 utilizar pandas, numpy o scipy.
 """
 
-
+import csv
 def pregunta_06():
     """
     La columna 5 codifica un diccionario donde cada cadena de tres letras
@@ -26,3 +26,23 @@ def pregunta_06():
      ('jjj', 5, 17)]
 
     """
+    with open('files/input/data.csv', 'r') as file:
+        data = list(csv.reader(file, delimiter='\t'))
+        
+    data = [fila[4] for fila in data]
+
+    data = [fila.split(',') for fila in data]
+
+    data = [dict([fila.split(':') for fila in fila]) for fila in data]
+
+    llave = set([llave for fila in data for llave in fila.keys()])
+
+    resultado = []
+    for llave in llave:
+        valores = [int(fila[llave]) for fila in data if llave in fila]
+        resultado.append((llave, min(valores), max(valores)))
+
+    resultado = sorted(resultado, key=lambda x: x[0])
+    return resultado
+
+print(pregunta_06())
